@@ -10,6 +10,8 @@ class CalculatorApp(App):
 
         self.calculation = TextInput(font_size=32, readonly=True, halign="right", multiline=False)
         layout.add_widget(self.calculation)
+        self.func_text = ''
+        self.error = 0
 
         buttons = [
             ('7', self.on_button_press),
@@ -39,20 +41,31 @@ class CalculatorApp(App):
         return layout
 
     def on_button_press(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
         current = self.calculation.text
+        current_func = self.func_text
         button_text = instance.text
         new_text = current + button_text
         self.calculation.text = new_text
+        self.func_text = current_func + button_text
+        self.error = 0
 
     def on_solution(self, instance):
         try:
-            text = self.calculation.text
+            text = self.func_text
             self.calculation.text = str(eval(text))
+            self.func_text = str(eval(text))
+        except ZeroDivisionError:
+            self.calculation.text = "Division by zero !"
+            self.error = 1
         except Exception:
             self.calculation.text = "Error"
+            self.error = 1
 
     def on_clear(self, instance):
         self.calculation.text = ''
+        self.func_text = ''
 
 
 if __name__ == "__main__":
