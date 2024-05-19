@@ -53,12 +53,12 @@ class CalculatorApp(App):
         buttons_top2 = [
             ('sin', self.trig_but),
             ('cos', self.trig_but),
-            ('tg', self.trig_but),
-            ('ctg', self.trig_but),
+            ('tg', self.trig_tg_but),
+            ('ctg', self.trig_ctg_but),
             ('arcsin', self.trig_arc_but),
             ('arccos', self.trig_arc_but),
-            ('arctg', self.trig_arc_but),
-            ('arcctg', self.trig_arc_but),
+            ('arctg', self.trig_atg_but),
+            ('arcctg', self.trig_actg_but),
         ]
 
         for label, func in buttons_middle:
@@ -127,6 +127,62 @@ class CalculatorApp(App):
         current = self.calculation.text
         current_func = self.func_text
         button_text1 = f'math.{instance.text}('
+        button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current_func + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def trig_tg_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'math.tan('
+        button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current_func + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def trig_ctg_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'1 / math.tan('
+        button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current_func + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def trig_atg_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'math.atan('
+        button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current_func + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def trig_actg_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'1 / math.atan('
         button_text2 = f'{instance.text}('
         new_text_calculation = current + button_text2
         new_text_func = current_func + button_text1
