@@ -3,16 +3,21 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.core.window import Window
+
+Window.size = (500, 750)
 
 
 class CalculatorApp(App):
     def build(self):
         layout = GridLayout(cols=4, rows=5)
-        self.main_layout = BoxLayout(orientation='vertical')
+        self.main_layout = BoxLayout(orientation='vertical', spacing=20)
 
         self.top_layout = BoxLayout()
+        self.top_grid = GridLayout()
 
-        self.calculation = TextInput(font_size=32, readonly=True, halign="right", multiline=False)
+        self.calculation = TextInput(font_size=32, readonly=True, halign="right", multiline=False, size_hint_y=None,
+                                     height=100)
         self.main_layout.add_widget(self.calculation)
         self.func_text = ''
         self.error = 0
@@ -33,10 +38,24 @@ class CalculatorApp(App):
             ('0', self.on_button_press),
             ('.', self.on_button_press),
             ('+', self.on_button_press),
-            ('=', self.on_solution),
-            ('C', self.on_clear),
+            ('=', self.on_solution)
+        ]
+
+        buttons_top = [
             ('(', self.on_button_press),
-            (')', self.on_button_press)
+            (')', self.on_button_press),
+            ('C', self.on_clear)
+        ]
+
+        buttons_top2 = [
+            ('sin', self.on_button_press),
+            ('cos', self.on_button_press),
+            ('tg', self.on_button_press),
+            ('ctg', self.on_button_press),
+            ('arcsin', self.on_button_press),
+            ('arccos', self.on_button_press),
+            ('arctg', self.on_button_press),
+            ('arcctg', self.on_button_press),
         ]
 
         for label, func in buttons_middle:
@@ -44,10 +63,18 @@ class CalculatorApp(App):
             button.bind(on_press=func)
             layout.add_widget(button)
 
-        self.return_button = Button(text='del', font_size=32)
-        self.return_button.bind(on_press=self.del_but)
-        layout.add_widget(self.return_button)
+        for label, func in buttons_top:
+            button = Button(text=label, font_size=32, size_hint_y=None,
+                            height=50)
+            button.bind(on_press=func)
+            self.top_layout.add_widget(button)
 
+        self.return_button = Button(text='del', font_size=32, size_hint_y=None,
+                                    height=50)
+        self.return_button.bind(on_press=self.del_but)
+        self.top_layout.add_widget(self.return_button)
+
+        self.main_layout.add_widget(self.top_layout)
         self.main_layout.add_widget(layout)
 
         return self.main_layout
