@@ -12,13 +12,16 @@ Window.size = (500, 750)
 
 class CalculatorApp(App):
     def build(self):
-        layout = GridLayout(cols=3, rows=5, row_force_default=True, row_default_height=60)
-        self.main_layout = BoxLayout(orientation='vertical', spacing=30)
+        layout = GridLayout(cols=3, rows=5, row_force_default=True, row_default_height=60, col_force_default=True,
+                            col_default_width=90)
+        self.main_layout = BoxLayout(orientation='vertical', spacing=30, padding=[10])
 
         self.top_layout = BoxLayout()
         self.top_grid = GridLayout(cols=4, rows=5, row_force_default=True, row_default_height=60)
-        self.right_grid = GridLayout(cols=2, rows=5, row_force_default=True, row_default_height=60)
-        self.middle_box = BoxLayout()
+        self.right_grid = GridLayout(cols=2, rows=5, row_force_default=True, col_force_default=True,
+                                     row_default_height=60,
+                                     col_default_width=100)
+        self.middle_box = BoxLayout(spacing=80)
         self.middle_box.add_widget(layout)
         self.middle_box.add_widget(self.right_grid)
 
