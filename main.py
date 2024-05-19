@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.core.window import Window
+import math
 
 Window.size = (500, 750)
 
@@ -11,10 +12,10 @@ Window.size = (500, 750)
 class CalculatorApp(App):
     def build(self):
         layout = GridLayout(cols=4, rows=5)
-        self.main_layout = BoxLayout(orientation='vertical', spacing=20)
+        self.main_layout = BoxLayout(orientation='vertical', spacing=30)
 
         self.top_layout = BoxLayout()
-        self.top_grid = GridLayout()
+        self.top_grid = GridLayout(cols=4, rows=5, row_force_default=True, row_default_height=60)
 
         self.calculation = TextInput(font_size=32, readonly=True, halign="right", multiline=False, size_hint_y=None,
                                      height=100)
@@ -48,14 +49,14 @@ class CalculatorApp(App):
         ]
 
         buttons_top2 = [
-            ('sin', self.on_button_press),
-            ('cos', self.on_button_press),
-            ('tg', self.on_button_press),
-            ('ctg', self.on_button_press),
-            ('arcsin', self.on_button_press),
-            ('arccos', self.on_button_press),
-            ('arctg', self.on_button_press),
-            ('arcctg', self.on_button_press),
+            ('sin', self.spec_but),
+            ('cos', self.spec_but),
+            ('tg', self.spec_but),
+            ('ctg', self.spec_but),
+            ('arcsin', self.spec_but),
+            ('arccos', self.spec_but),
+            ('arctg', self.spec_but),
+            ('arcctg', self.spec_but),
         ]
 
         for label, func in buttons_middle:
@@ -65,16 +66,22 @@ class CalculatorApp(App):
 
         for label, func in buttons_top:
             button = Button(text=label, font_size=32, size_hint_y=None,
-                            height=50)
+                            height=60)
             button.bind(on_press=func)
             self.top_layout.add_widget(button)
 
+        for label, func in buttons_top2:
+            button = Button(text=label, font_size=32)
+            button.bind(on_press=func)
+            self.top_grid.add_widget(button)
+
         self.return_button = Button(text='del', font_size=32, size_hint_y=None,
-                                    height=50)
+                                    height=60)
         self.return_button.bind(on_press=self.del_but)
         self.top_layout.add_widget(self.return_button)
 
         self.main_layout.add_widget(self.top_layout)
+        self.main_layout.add_widget(self.top_grid)
         self.main_layout.add_widget(layout)
 
         return self.main_layout
@@ -89,6 +96,7 @@ class CalculatorApp(App):
         self.calculation.text = new_text
         self.func_text = current_func + button_text
         self.error = 0
+        print(self.func_text)
 
     def on_solution(self, instance):
         try:
@@ -109,6 +117,20 @@ class CalculatorApp(App):
     def del_but(self, *args):
         self.calculation.text = self.calculation.text[0:-1]
         self.func_text = self.func_text[0:-1]
+
+    def spec_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'math.{instance.text}('
+        button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
 
 
 if __name__ == "__main__":
