@@ -55,10 +55,10 @@ class CalculatorApp(App):
             ('cos', self.trig_but),
             ('tg', self.trig_but),
             ('ctg', self.trig_but),
-            ('arcsin', self.trig_but),
-            ('arccos', self.trig_but),
-            ('arctg', self.trig_but),
-            ('arcctg', self.trig_but),
+            ('arcsin', self.trig_arc_but),
+            ('arccos', self.trig_arc_but),
+            ('arctg', self.trig_arc_but),
+            ('arcctg', self.trig_arc_but),
         ]
 
         for label, func in buttons_middle:
@@ -108,9 +108,10 @@ class CalculatorApp(App):
         except ZeroDivisionError:
             self.calculation.text = "Division by zero !"
             self.error = 1
-        except Exception:
+        except Exception as e:
             self.calculation.text = "Error"
             self.error = 1
+            print(e)
 
     def on_clear(self, instance):
         self.calculation.text = ''
@@ -128,7 +129,21 @@ class CalculatorApp(App):
         button_text1 = f'math.{instance.text}('
         button_text2 = f'{instance.text}('
         new_text_calculation = current + button_text2
-        new_text_func = current + button_text1
+        new_text_func = current_func + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def trig_arc_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'math.a{instance.text[3:]}('
+        button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current_func + button_text1
         self.calculation.text = new_text_calculation
         self.func_text = new_text_func
         self.error = 0
@@ -142,7 +157,7 @@ class CalculatorApp(App):
         button_text1 = f'**'
         button_text2 = f'^'
         new_text_calculation = current + button_text2
-        new_text_func = current + button_text1
+        new_text_func = current_func + button_text1
         self.calculation.text = new_text_calculation
         self.func_text = new_text_func
         self.error = 0
@@ -156,7 +171,7 @@ class CalculatorApp(App):
         button_text1 = f'**0.5'
         button_text2 = f'^½'
         new_text_calculation = current + button_text2
-        new_text_func = current + button_text1
+        new_text_func = current_func + button_text1
         self.calculation.text = new_text_calculation
         self.func_text = new_text_func
         self.error = 0
