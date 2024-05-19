@@ -3,6 +3,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.core.window import Window
 import math
 
@@ -11,11 +12,15 @@ Window.size = (500, 750)
 
 class CalculatorApp(App):
     def build(self):
-        layout = GridLayout(cols=4, rows=5)
+        layout = GridLayout(cols=3, rows=5, row_force_default=True, row_default_height=60)
         self.main_layout = BoxLayout(orientation='vertical', spacing=30)
 
         self.top_layout = BoxLayout()
         self.top_grid = GridLayout(cols=4, rows=5, row_force_default=True, row_default_height=60)
+        self.right_grid = GridLayout(cols=2, rows=5, row_force_default=True, row_default_height=60)
+        self.middle_box = BoxLayout()
+        self.middle_box.add_widget(layout)
+        self.middle_box.add_widget(self.right_grid)
 
         self.calculation = TextInput(font_size=32, readonly=True, halign="right", multiline=False, size_hint_y=None,
                                      height=100)
@@ -27,21 +32,24 @@ class CalculatorApp(App):
             ('1', self.on_button_press),
             ('2', self.on_button_press),
             ('3', self.on_button_press),
-            ('/', self.on_button_press),
             ('4', self.on_button_press),
             ('5', self.on_button_press),
             ('6', self.on_button_press),
-            ('*', self.on_button_press),
             ('7', self.on_button_press),
             ('8', self.on_button_press),
             ('9', self.on_button_press),
-            ('-', self.on_button_press),
             ('0', self.on_button_press),
             ('.', self.on_button_press),
-            ('+', self.on_button_press),
-            ('=', self.on_solution),
+        ]
+
+        buttons_middle2 = [
             ('^x', self.exponentiation_but),
             ('√', self.root_extraction_but),
+            ('+', self.on_button_press),
+            ('-', self.on_button_press),
+            ('/', self.on_button_press),
+            ('*', self.on_button_press),
+            ('=', self.on_solution),
         ]
 
         buttons_top = [
@@ -62,9 +70,16 @@ class CalculatorApp(App):
         ]
 
         for label, func in buttons_middle:
-            button = Button(text=label, font_size=32)
+            button = Button(text=label, font_size=32, size_hint_y=None,
+                            height=60)
             button.bind(on_press=func)
             layout.add_widget(button)
+
+        for label, func in buttons_middle2:
+            button = Button(text=label, font_size=32, size_hint_y=None,
+                            height=60)
+            button.bind(on_press=func)
+            self.right_grid.add_widget(button)
 
         for label, func in buttons_top:
             button = Button(text=label, font_size=32, size_hint_y=None,
@@ -84,7 +99,8 @@ class CalculatorApp(App):
 
         self.main_layout.add_widget(self.top_layout)
         self.main_layout.add_widget(self.top_grid)
-        self.main_layout.add_widget(layout)
+        self.main_layout.add_widget(self.middle_box)
+        self.main_layout.add_widget(Label())
 
         return self.main_layout
 
