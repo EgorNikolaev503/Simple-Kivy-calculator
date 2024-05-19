@@ -45,6 +45,10 @@ class CalculatorApp(App):
             ('.', self.on_button_press),
         ]
 
+        self.pi_button = Button(text='π', font_size=32, size_hint_y=None,
+                                height=60)
+        self.pi_button.bind(on_press=self.pi_but)
+
         buttons_middle2 = [
             ('^x', self.exponentiation_but),
             ('√', self.root_extraction_but),
@@ -55,7 +59,7 @@ class CalculatorApp(App):
         ]
 
         self.equall_button = Button(text='=', font_size=32, size_hint_y=None,
-                                    height=60, size_hint_x=None, width=200)
+                                    height=60, size_hint_x=None, width=200, background_color=(1, 0.698, 0.220, 1))
         self.equall_button.bind(on_press=self.on_solution)
 
         buttons_top = [
@@ -80,6 +84,8 @@ class CalculatorApp(App):
                             height=60)
             button.bind(on_press=func)
             layout.add_widget(button)
+
+        layout.add_widget(self.pi_button)
 
         for label, func in buttons_middle2:
             button = Button(text=label, font_size=32, size_hint_y=None,
@@ -144,6 +150,20 @@ class CalculatorApp(App):
     def del_but(self, *args):
         self.calculation.text = self.calculation.text[0:-1]
         self.func_text = self.func_text[0:-1]
+
+    def pi_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'math.pi'
+        button_text2 = f'{instance.text}'
+        new_text_calculation = current + button_text2
+        new_text_func = current_func + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
 
     def trig_but(self, instance):
         if self.error == 1:
