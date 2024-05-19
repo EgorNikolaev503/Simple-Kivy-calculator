@@ -39,7 +39,9 @@ class CalculatorApp(App):
             ('0', self.on_button_press),
             ('.', self.on_button_press),
             ('+', self.on_button_press),
-            ('=', self.on_solution)
+            ('=', self.on_solution),
+            ('^x', self.exponentiation_but),
+            ('√', self.root_extraction_but),
         ]
 
         buttons_top = [
@@ -49,14 +51,14 @@ class CalculatorApp(App):
         ]
 
         buttons_top2 = [
-            ('sin', self.spec_but),
-            ('cos', self.spec_but),
-            ('tg', self.spec_but),
-            ('ctg', self.spec_but),
-            ('arcsin', self.spec_but),
-            ('arccos', self.spec_but),
-            ('arctg', self.spec_but),
-            ('arcctg', self.spec_but),
+            ('sin', self.trig_but),
+            ('cos', self.trig_but),
+            ('tg', self.trig_but),
+            ('ctg', self.trig_but),
+            ('arcsin', self.trig_but),
+            ('arccos', self.trig_but),
+            ('arctg', self.trig_but),
+            ('arcctg', self.trig_but),
         ]
 
         for label, func in buttons_middle:
@@ -118,13 +120,41 @@ class CalculatorApp(App):
         self.calculation.text = self.calculation.text[0:-1]
         self.func_text = self.func_text[0:-1]
 
-    def spec_but(self, instance):
+    def trig_but(self, instance):
         if self.error == 1:
             self.calculation.text = ''
         current = self.calculation.text
         current_func = self.func_text
         button_text1 = f'math.{instance.text}('
         button_text2 = f'{instance.text}('
+        new_text_calculation = current + button_text2
+        new_text_func = current + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def exponentiation_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'**'
+        button_text2 = f'^'
+        new_text_calculation = current + button_text2
+        new_text_func = current + button_text1
+        self.calculation.text = new_text_calculation
+        self.func_text = new_text_func
+        self.error = 0
+        print(self.func_text)
+
+    def root_extraction_but(self, instance):
+        if self.error == 1:
+            self.calculation.text = ''
+        current = self.calculation.text
+        current_func = self.func_text
+        button_text1 = f'**0.5'
+        button_text2 = f'^½'
         new_text_calculation = current + button_text2
         new_text_func = current + button_text1
         self.calculation.text = new_text_calculation
