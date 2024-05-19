@@ -51,9 +51,12 @@ class CalculatorApp(App):
             ('+', self.on_button_press),
             ('-', self.on_button_press),
             ('/', self.on_button_press),
-            ('*', self.on_button_press),
-            ('=', self.on_solution),
+            ('*', self.on_button_press)
         ]
+
+        self.equall_button = Button(text='=', font_size=32, size_hint_y=None,
+                                    height=60, size_hint_x=None, width=200)
+        self.equall_button.bind(on_press=self.on_solution)
 
         buttons_top = [
             ('(', self.on_button_press),
@@ -83,6 +86,8 @@ class CalculatorApp(App):
                             height=60)
             button.bind(on_press=func)
             self.right_grid.add_widget(button)
+
+        self.right_grid.add_widget(self.equall_button)
 
         for label, func in buttons_top:
             button = Button(text=label, font_size=32, size_hint_y=None,
